@@ -1,1 +1,1 @@
-# -GCN-
+# gen_model with GCN
