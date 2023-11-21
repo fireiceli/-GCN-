@@ -68,13 +68,6 @@ def get_constraint_decoder(tokenizer, type_schema, decoding_schema, source_prefi
                 decoding_schema, decoding_schema)
         )
 
-def cleangen(gen,removet):
-    newgen=[]
-    for x in gen:
-        if(x!=removet):
-            newgen.append(x)
-    return newgen
-
 
 class ConstraintDecoder:
     def __init__(self, tokenizer, source_prefix):
@@ -91,8 +84,6 @@ class ConstraintDecoder:
             # Remove Source Prefix for Generation
             src_sentence = src_sentence[len(self.source_prefix_tokenized):]
 
-
-
         if debug:
             print("Src:", self.tokenizer.convert_ids_to_tokens(src_sentence))
             print("Tgt:", self.tokenizer.convert_ids_to_tokens(tgt_generated))
@@ -101,6 +92,7 @@ class ConstraintDecoder:
             src_sentence.tolist(),
             tgt_generated.tolist()
         )
+
         if debug:
             print('========================================')
             print('valid tokens:', self.tokenizer.convert_ids_to_tokens(
@@ -123,15 +115,8 @@ class TreeConstraintDecoder(ConstraintDecoder):
         self.type_start = self.tokenizer.convert_tokens_to_ids([type_start])[0]
         self.type_end = self.tokenizer.convert_tokens_to_ids([type_end])[0]
 
-
     def check_state(self, tgt_generated):
-        if(self.tokenizer.pad_token_id==0):
-            self.start_id=self.tokenizer.pad_token_id
-        else:
-            self.start_id=self.tokenizer.eos_token_id
-        if tgt_generated[-1] == self.start_id:
-            return 'start', -1
-        if tgt_generated[-2] == self.start_id and tgt_generated[-1] ==self.tokenizer.bos_token_id:
+        if tgt_generated[-1] == self.tokenizer.pad_token_id:
             return 'start', -1
 
         special_token_set = {self.type_start, self.type_end}
@@ -175,10 +160,9 @@ class TreeConstraintDecoder(ConstraintDecoder):
 
         tree = prefix_tree
         for index, token in enumerate(generated):
-            try:
-                tree = tree[token]
-            except:
+            if(token==2):
                 return [self.type_end]
+            tree = tree[token]
             is_tree_end = len(tree) == 1 and self.tree_end in tree
 
             if is_tree_end:
@@ -187,8 +171,6 @@ class TreeConstraintDecoder(ConstraintDecoder):
                     src_sequence=src_sentence,
                     end_sequence_search_tokens=end_sequence_search_tokens,
                 )
-                print(generated)
-                print(valid_token)
                 return valid_token
 
             if self.tree_end in tree:
@@ -198,8 +180,6 @@ class TreeConstraintDecoder(ConstraintDecoder):
                         src_sequence=src_sentence,
                         end_sequence_search_tokens=end_sequence_search_tokens,
                     )
-                    print(generated)
-                    print(valid_token)
                     return valid_token
                 except IndexError:
                     # Still search tree
@@ -219,12 +199,9 @@ class TreeConstraintDecoder(ConstraintDecoder):
         if self.tokenizer.eos_token_id in src_sentence:
             src_sentence = src_sentence[:src_sentence.index(
                 self.tokenizer.eos_token_id)]
-        if self.tokenizer.bos_token_id in src_sentence:
-            src_sentence.pop(src_sentence.index(self.tokenizer.bos_token_id))
-
-        tgt_generated = cleangen(tgt_generated,self.tokenizer.bos_token_id)
 
         state, index = self.check_state(tgt_generated)
+
 
         print("State: %s" % state) if debug else None
 
@@ -281,9 +258,6 @@ class TreeConstraintDecoder(ConstraintDecoder):
 
         print("Valid: %s" % self.tokenizer.convert_ids_to_tokens(
             valid_tokens)) if debug else None
-
-
-
         return valid_tokens
 
 
@@ -298,14 +272,7 @@ class SpanConstraintDecoder(ConstraintDecoder):
         self.type_end = self.tokenizer.convert_tokens_to_ids([type_end])[0]
 
     def check_state(self, tgt_generated):
-        if (self.tokenizer.pad_token_id == 0):
-            self.start_id = self.tokenizer.pad_token_id
-        else:
-            self.start_id = self.tokenizer.eos_token_id
-        if tgt_generated[-1] == self.start_id:
-            return 'start', -1
-
-        if tgt_generated[-2] == self.start_id and tgt_generated[-1] ==self.tokenizer.bos_token_id:
+        if tgt_generated[-1] == self.tokenizer.pad_token_id:
             return 'start', -1
 
         special_token_set = {self.type_start, self.type_end}
@@ -345,10 +312,9 @@ class SpanConstraintDecoder(ConstraintDecoder):
         """
         tree = prefix_tree
         for index, token in enumerate(generated):
-            try:
-                tree = tree[token]
-            except:
+            if (token == 2):
                 return [self.type_end]
+            tree = tree[token]
             is_tree_end = len(tree) == 1 and self.tree_end in tree
 
             if is_tree_end:
@@ -386,10 +352,6 @@ class SpanConstraintDecoder(ConstraintDecoder):
             src_sentence = src_sentence[:src_sentence.index(
                 self.tokenizer.eos_token_id)]
 
-        if self.tokenizer.bos_token_id in src_sentence:
-            src_sentence.pop(src_sentence.index(self.tokenizer.bos_token_id))
-
-        tgt_generated = cleangen(tgt_generated,self.tokenizer.bos_token_id)
         state, index = self.check_state(tgt_generated)
 
         print("State: %s" % state) if debug else None
