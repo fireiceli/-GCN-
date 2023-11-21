@@ -122,7 +122,7 @@ The command for the training is as follows (see bash scripts and Python files fo
 arguments):
 
 ```bash
-bash run_seq2seq_verbose.bash -d 0 -f tree -m t5-base --label_smoothing 0 -l 1e-4 --lr_scheduler linear --warmup_steps 2000 -b 16 -i one_ie_ace2005_subtype
+bash run_seq2seq_gcn.bash -d 0 -f tree -m t5-base --label_smoothing 0 -l 1e-4 --lr_scheduler linear --warmup_steps 2000 -b 16 -i one_ie_ace2005_subtype
 ```
 bash run_seq2seq_gcn.bash -d 0 -f tree -m t5-large --label_smoothing 0 -l 5e-5 --lr_scheduler linear --warmup_steps 2000 -b 8 -i one_ie_ere_en_subtype
 
