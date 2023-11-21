@@ -134,7 +134,7 @@ bash run_seq2seq_with_pretrain.bash -d 0 -f tree -m t5_large --label_smoothing 0
 
 - 
 - `-d` refers to the GPU device id.
-- `-m t5-base` refers to using T5-base.******but we load local medel for training,so -m only use for substructure learning and as asymbol. To change model,we need to change raw codes.******
+- `-m t5-base` refers to using T5-base.******but we load local medol for training, so -m only use for substructure learning and as a symbol. To change model,we need to change raw codes.******
 - Currently, constrained decoding algorithms do not support `use_fast_tokenizer=True` and beam search yet.
 
 Trained models are saved in the `models/` folder.
