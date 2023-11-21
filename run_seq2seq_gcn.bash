@@ -118,7 +118,7 @@ export TOKENIZERS_PARALLELISM=false
 
 output_dir=${model_folder}
 
-CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES} python g_run_bart.py \
+CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES} python g_run_t5.py \
     --do_train --do_eval --do_predict ${constraint_decoding} \
     --label_smoothing_sum=False \
     --use_fast_tokenizer=False \
