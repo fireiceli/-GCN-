@@ -19,7 +19,6 @@ Fine-tuning the library models for sequence to sequence.
 # You can also adapt this script on your own sequence to sequence task. Pointers for this are left as comments.
 
 import torch
-from torch_geometric.nn import GCNConv
 import spacy
 import logging
 import os
