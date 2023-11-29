@@ -48,7 +48,7 @@ It contains three lines: the first line is event type name list, the second line
   {"End-Position": ["Place", "Person", "Entity"], ...}
   ```
 
-###DYGIEPP ACE05
+###DYGIEPP ACE05 
 ####OneIE ACE05+ ERE
 
 After data preprocessing and we get the following data files:
@@ -124,7 +124,7 @@ arguments):
 ```bash
 bash run_seq2seq_gcn.bash -d 0 -f tree -m t5-base --label_smoothing 0 -l 1e-4 --lr_scheduler linear --warmup_steps 2000 -b 16 -i one_ie_ace2005_subtype
 ```
-bash run_seq2seq_gcn.bash -d 0 -f tree -m t5-large --label_smoothing 0 -l 5e-5 --lr_scheduler linear --warmup_steps 2000 -b 8 -i one_ie_ere_en_subtype
+bash run_seq2seq_gcn.bash -d 0 -f tree -m t5-base --label_smoothing 0 -l 1e-4 --lr_scheduler linear --warmup_steps 2000 -b 8 -i one_ie_ere_en_subtype
 
 bash run_seq2seq_with_pretrain.bash -d 0 -f tree -m t5_large --label_smoothing 0 -l 5e-5 --lr_scheduler linear --warmup_steps 2000 -b 8 -i one_ie_ere_en_subtype
 
@@ -132,10 +132,10 @@ bash run_seq2seq_with_pretrain.bash -d 0 -f tree -m t5_large --label_smoothing 0
 
 --max_train_samples=4300
 
-- 
+- '-i' means dataset.
 - `-d` refers to the GPU device id.
-- `-m t5-base` refers to using T5-base.******but we load local medol for training, so -m only use for substructure learning and as a symbol. To change model,we need to change raw codes.******
-- Currently, constrained decoding algorithms do not support `use_fast_tokenizer=True` and beam search yet.
+- `-m t5-base` refers to using T5-base.******but we load local model for training, so -m only use for substructure learning and as a symbol. To change model,we need to change raw codes.******
+- Currently, constrained decoding algorithms shoud be changed to support bart-model.For bart,more changes are needed if you want.
 
 Trained models are saved in the `models/` folder.
 
